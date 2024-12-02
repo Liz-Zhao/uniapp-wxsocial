@@ -46,7 +46,7 @@ router.get("/notifications", isAuth, Notification.getNotifications);
 // 评论
 router.post("/comment",isAuth, Comment.createComment);
 router.delete("/comment/:id", isAuth,Comment.deleteComment)
-router.get("/comments", Comment.getCommentsByPost )
-router.get("/commentTree", Comment.getCommentTree )
+router.get("/comments", isAuth, Comment.getCommentsByPost )
+router.get("/comment", Comment.getComment )
 
 module.exports = router;

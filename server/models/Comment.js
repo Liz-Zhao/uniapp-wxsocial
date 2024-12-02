@@ -11,8 +11,8 @@ const { Schema } = mongoose;
 - 对楼中楼进行回复，pid 为一级评论的 id，replyid 为你回复的评论的 id
 
 _id 评论原有的主键id
-replyid 该评论回复的评论id，没有则为空
-pid 该评论所在的父级id，没有则为空
+replyid 该评论回复的评论id
+pid 该评论所在的父级id
 post 文字的标识id
 */
 

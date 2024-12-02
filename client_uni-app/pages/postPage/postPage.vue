@@ -21,8 +21,10 @@
 		</view>
 
 		<!-- 评论展示区域 -->
+		
 		<view class="comments-box">
 			<view class="comment-nums">评论 {{post.comments}}</view>
+			<scroll-view scroll-y="true" style="height: 100vh;" @scrolltolower='scrolltolower'>
 			<view class="comment-item" v-for="(item,index) in comment_list" :key="index">
 				<view>
 					<user-card :userInfo='item.user' :updatedDate="item.updatedAt" :avatarSize="userIconSize"
@@ -31,8 +33,9 @@
 					</user-card>
 					<rich-text :nodes="item.message" @click.stop="handleReply(item._id, item._id)" ></rich-text>
 				</view>
-
-				<view class="replies-box">
+				
+				<!-- 子回复区域 -->
+				<view class="replies-box" >
 					<view v-for="(p,index) in item.replies" :key='p._id' 
 						style="margin-bottom: 10px;">
 						<user-card :userInfo='p.user' :updatedDate="p.updatedAt" :avatarSize="userIconSize">
@@ -48,6 +51,7 @@
 						</view>
 						
 					</view>
+					<view style="color: #5351ff;" v-show="item.replyCounts >3 && item.replies.length < item.replyCounts" @click="showMoreReplies(item._id)">剩下{{item.replyCounts-3}}个回复</view>
 				</view>
 
 			</view>
@@ -58,8 +62,10 @@
 			<view class="comments-box-bottom" v-else>
 				暂无评论
 			</view>
+			</scroll-view>
 
 		</view>
+		
 
 
 		<!-- 底部固定评论输入框，默认 isTextareaVisible : false 不显示；弹出显示-->
@@ -67,10 +73,7 @@
 		<view class="c-wrapper" v-if="isTextareaVisible"  @click="hideTextarea"></view>
 		<!-- 弹窗 -->
 		<view ref="textarea" class="comment-box " :class="!isTextareaVisible? 'hide': ''" :style="'padding-bottom:'+inputBottom+'px;'">
-			<!-- :style="{bottom: inputBottom +'px'}" -->
-			<!-- <textarea v-model="comment" placeholder="说点什么..." :maxlength="maxlength" :cursor-spacing="10" @click.stop=""
-			class="comment-input" :fixed="true" :show-confirm-bar="false" :adjust-position="false" :auto-height='true'
-			@focus="focusTextarea" @blur="blurTextarea" /> -->
+
 			<textarea v-model="comment" placeholder="说点什么..." :maxlength="maxlength" :cursor-spacing="10" 
 			class="comment-input" :fixed="true" :show-confirm-bar="false" :auto-height='true' :adjust-position="false"
 			@focus="focusTextarea" @blur="blurTextarea"
@@ -124,6 +127,9 @@
 				},
 				comment: '',
 				comment_list: [],
+				page:1,
+				limit:10,
+				total:0,
 				isTextareaVisible: false,
 				maxlength: 200,
 				u_token: uni.getStorageSync('userAuth') || '',
@@ -158,11 +164,12 @@
 					url: "/comments",
 					data: {
 						post_id: this.post_id,
-						limit: 10,
-						page: 1
+						limit: this.limit,
+						page: this.page,
 					}
 				}).then((res) => {
-					this.comment_list = res.data
+					this.total = res.counts;
+					this.comment_list = [...this.comment_list, ...res.data.map((item) => ({ ...item, page: 1 }))];
 				})
 			},
 			createComment() {
@@ -298,9 +305,35 @@
 			blurTextarea(e){
 				this.inputBottom = 20;
 				this.isTextareaVisible=false;
-				
 			},
-			
+			scrolltolower(e){
+				if(this.page * this.limit >= this.total){
+					return
+				}
+				this.page = this.page+1;
+				this.getCommentList()
+			},
+			showMoreReplies(id){
+				get({url:"/comment",
+				data: {
+					post_id: this.post_id,
+					limit: 10,
+					page: this.comment_list.find((item) => item._id == id)?.page,
+					pid:id
+				}}).then((res)=>{
+					this.comment_list = this.comment_list.map((item)=>{
+						if(item._id == id){
+							return {
+								...item,
+								replies: [...item.replies, ...res.data],
+								page: item.page+1
+							}
+						}else{
+							return item;
+						}
+					})
+				})
+			}
 
 		},
 		computed: {
@@ -354,10 +387,6 @@
 		padding-bottom: 100px;
 		background-color: #fff;
 	}
-	.comment-nums{
-		margin: 10px;
-		font-weight: 700;
-	}
 
 	.comments-box-bottom {
 		color: #d8d4d1;
@@ -379,7 +408,15 @@
 		padding-left: 10px;
 		border-left: 2px solid #cccccc;
 	}
-	
+	.comment-nums{
+		position: sticky;
+		top: 0;
+		z-index: 30;
+		width: 100%;
+		background-color: #ffffff;
+		padding: 10px;
+		font-weight: 700;
+	}
 	.c-wrapper{
 		width: 100%;
 		height: 100%;

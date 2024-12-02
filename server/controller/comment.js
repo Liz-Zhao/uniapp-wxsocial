@@ -59,6 +59,8 @@ const getCommentsByPost = async (req, res) => {
       .limit(Number(pageSize))
       .lean({ virtuals: true });
 
+    const topLevelCommentCounts = await Comment.countDocuments({ post: post_id, pid: null, isDeleted:false })
+
     // 构建楼中楼评论
     const commentMap = {};
     for (let comment of topLevelComments) {
@@ -74,8 +76,11 @@ const getCommentsByPost = async (req, res) => {
       // 获取楼中楼的子评论
       const replies = await Comment.find({ pid: comment._id, isDeleted:false})
         .populate("user", "username profilePic profilePicUrl")
-        .sort({ createdAt: 1 }) // 按时间排序
+        .sort({ createdAt: 1 })
+        .limit(3) // 按时间排序
         .lean({ virtuals: true });
+
+      const replyCounts = await Comment.countDocuments({pid: comment._id, isDeleted:false});
 
       // 获取每条子评论的 `replyid` 信息
       for (const reply of replies) {
@@ -94,20 +99,18 @@ const getCommentsByPost = async (req, res) => {
                     user:null
                 }
             }
-            
-          
         }
       }
 
       // 将子评论挂载到一级评论下
-      commentMap[comment._id] = { ...comment, replies };
+      commentMap[comment._id] = { ...comment, replies, replyCounts };
     }
 
     // console.log(commentMap)
 
     return res
       .status(200)
-      .json({ code: 200, message: "success", data: Object.values(commentMap) });
+      .json({ code: 200, message: "success",counts:topLevelCommentCounts, data: Object.values(commentMap) });
 
   } catch (error) {
     return res.status(500).json({
@@ -118,31 +121,43 @@ const getCommentsByPost = async (req, res) => {
   }
 };
 
-// 适用于查看更多，展开查看
-const buildCommentTree = async (comments, parentId = null) => {
-  const tree = [];
-  for (const comment of comments.filter(
-    (c) => String(c.pid) === String(parentId)
-  )) {
-    const replies = await buildCommentTree(comments, comment._id); // 递归查找子评论
-    tree.push({ ...comment, replies });
-  }
-  return tree;
-};
 
-const getCommentTree = async (req, res) => {
+
+const getComment = async (req, res) => {
   try {
-    const { post_id } = req.query;
+    const { post_id, pid,limit,page} = req.query;
+
+    let pageSize = limit ? limit : 10;
+    let pageIndex = page ? page : 1;
 
     // 获取该文章的所有评论
-    const allComments = await Comment.find({ post: post_id })
-      .populate("user", "username")
-      .lean();
+    const allComments = await Comment.find({ post: post_id, pid })
+      .populate("user","username profilePic profilePicUrl")
+      .skip(3+(pageIndex -1)*pageSize) // 前3个默认显示，所以从第4个开始获取
+      .limit(Number(pageSize))
+      .lean({ virtuals: true });
 
-    // 构造评论树
-    const commentTree = await buildCommentTree(allComments);
+    // 数量
+    const Counts = await Comment.countDocuments({ post: post_id, pid })
 
-    return res.status(200).json({ comments: commentTree });
+    for(const reply of allComments){
+      if(String(reply.replyid) !== String(pid)){
+        reply.replyTo = await Comment.findById(reply.replyid)
+            .populate("user", "username profilePic profilePicUrl")
+            .lean({ virtuals: true });
+
+
+        if(reply.replyTo.isDeleted){
+          reply.replyTo = {
+              ...reply.replyTo,
+              message:'该评论被删除',
+              user:null
+          }
+      }
+      }
+    }
+
+    return res.status(200).json({code: 200, message: "success", counts:Counts,data: allComments });
   } catch (error) {
     return res.status(500).json({
       code: 500,
@@ -176,6 +191,6 @@ const deleteComment = async (req, res) => {
 module.exports = {
   createComment,
   getCommentsByPost,
-  getCommentTree,
+  getComment,
   deleteComment,
 };

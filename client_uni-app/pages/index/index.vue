@@ -70,7 +70,7 @@
 						page: this.pageIndex
 					},
 				}).then((res) => {
-					// console.log(res)
+					
 					this.list = [...this.list, ...res.data]
 					const userId = store.getters['user/user_id'];
 					this.list = this.list.map((item) => ({
