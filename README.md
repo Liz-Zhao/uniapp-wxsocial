@@ -7,4 +7,4 @@
 ![首页](./client_uni-app/static/snipaste/home.png)
 ![通知](./client_uni-app/static/snipaste/message.png)
 ![我的](./client_uni-app/static/snipaste/my.png)
-![详情页面](./client_uni-app/static/snipaste/detail.png)
+![评论区](./client_uni-app/static/snipaste/comment.png)
