@@ -42,7 +42,9 @@
 	}
 </script>
 
-<style>
+<style lang="scss">
+	@import'../../common/common.scss';
+	
 	.loginbox {
 		width: 100%;
 		height: 100vh;
@@ -50,15 +52,15 @@
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-		
+		.loginImg{
+			width: 50%;
+		}
+		.btn-login {
+			width: 80%;
+			background-color: $theme-color;
+			color: $bg-color-white;
+			margin: 15px auto;
+		}
 	}
-	.loginImg{
-		width: 50%;
-	}
-	.btn-login {
-		width: 80%;
-		background-color: #5351ff;
-		color: #fff;
-		margin: 15px auto;
-	}
+	
 </style>

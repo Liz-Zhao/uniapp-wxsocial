@@ -8,7 +8,7 @@
 					:interval="interval" :duration="duration">
 					<swiper-item v-for="(item,index) in post.imagesUrl" :key="index">
 						<view class="swiper-item "  @click="clickImg(item)">
-							<image :src="item" mode="aspectFill"></image>
+							<image :src="item" mode="aspectFit"></image>
 						</view>
 					</swiper-item>
 
@@ -92,7 +92,7 @@
 			</view>
 			
 			<view class="comment-tip" v-if="isTextareaVisible">
-				<text class="quote">{{inputLength}}</text>
+				<text>{{inputLength}}</text>
 				<view class="btn-comment " :class="BtnIsSubmit? 'active': ''" @click.stop="createComment">提交</view>
 			</view>
 			
@@ -106,9 +106,7 @@
 
 <script>
 	import {
-		del,
-		get,
-		post
+		del,get,post
 	} from '../../api/request';
 	import store from '../../store';
 
@@ -361,21 +359,23 @@
 	}
 </script>
 
-<style>
+<style lang="scss">
+	@import'../../common/common.scss';
 	.swiper {
 		width: 100%;
-		max-height: 460px;
+		height: 460px;
+		
+		.swiper-item {
+			width: 100%;
+			height: 100%;
+			
+			image {
+				width: 100%;
+				height: 100%;
+			}
+		}
 	}
 
-	.swiper-item {
-		width: 100%;
-		height: 100%;
-	}
-
-	.swiper-item image {
-		width: 100%;
-		height: 100%;
-	}
 
 	.btn-follow {
 		position: absolute;
@@ -385,38 +385,39 @@
 	.comments-box {
 		border-top: 1px solid #cccccc;
 		padding-bottom: 100px;
-		background-color: #fff;
-	}
-
-	.comments-box-bottom {
-		color: #d8d4d1;
-		font-size: 16px;
-		text-align: center;
-		margin-top: 20px;
-	}
-
-	.comment-item {
-		width: 100%;
-		padding: 10px;
-		border-bottom: 1px solid #cccccc;
-		background-color: #fff;
+		background-color: $bg-color-white;
+		
+		.comment-nums{
+			position: sticky;
+			top: 0;
+			z-index: 30;
+			width: 100%;
+			background-color: $bg-color-white;
+			padding: 10px;
+			font-weight: 700;
+		}
+		
+		.comment-item {
+			width: 100%;
+			padding: 10px;
+			border-bottom: 1px solid $btn-border-color;
+			background-color: $bg-color-white;
+		}
+		.comments-box-bottom {
+			color: #d8d4d1;
+			font-size: 16px;
+			text-align: center;
+			margin-top: 20px;
+		}
 	}
 
 	.replies-box {
 		margin-left: 10px;
 		margin-top: 10px;
 		padding-left: 10px;
-		border-left: 2px solid #cccccc;
+		border-left: 2px solid $btn-border-color;
 	}
-	.comment-nums{
-		position: sticky;
-		top: 0;
-		z-index: 30;
-		width: 100%;
-		background-color: #ffffff;
-		padding: 10px;
-		font-weight: 700;
-	}
+	
 	.c-wrapper{
 		width: 100%;
 		height: 100%;
@@ -424,61 +425,62 @@
 		top: 0;
 		left: 0;
 		bottom: 0;
-		background-color: rgba(0, 0, 0, 0.4);
-		z-index: 12;
+		background-color: $hide-popup-color;
+		z-index: 31;
 	}
 	.comment-box {
 		position: fixed;
 		left: 0;
 		bottom: 0;
 		width: 100%;
-		background-color: #fff;
+		background-color: $bg-color-white;
 		z-index: 30;
 		padding: 10px;
+		&.hide{
+			display: flex;
+			gap: 20px;
+			justify-content: space-between;
+			align-items: center;
+		}
+		&.show{
+			display: flex;
+			flex-direction: column;
+		}
+		
+		.comment-input {
+			background-color: $btn-border-color;
+			border-radius: 10px;
+			width: 100%;
+			padding: 10px;
+			max-height: 250px;
+		}
+		.operation-toolkit{
+			display: flex;
+			gap: 5px;
+		}
+		.comment-tip{
+			width: 100%;
+			display: flex;
+			gap: 5px;
+			align-items: center;
+			justify-content: flex-end;
+			margin-right: 5px;
+			margin-top: 5px;
+			
+			.btn-comment {
+				border: 1px solid $btn-border-color;
+				color: #cccccc;
+				border-radius: 10px;
+				padding: 5px 10px;
+				&.active{
+					border-color: $theme-color;
+					color: $theme-color;
+				}
+			}
+		}
+			
 	}
-	.comment-box.hide{
-		display: flex;
-		gap: 20px;
-		justify-content: space-between;
-		align-items: center;
-	}
-	.comment-box.show{
-		display: flex;
-		flex-direction: column;
-	}
-	.comment-input {
-		background-color: #cccccc;
-		border-radius: 10px;
-		width: 100%;
-		padding: 10px;
-		max-height: 250px;
-	}
-	.operation-toolkit{
-		display: flex;
-		gap: 5px;
-	}
-	.comment-box .comment-tip{
-		width: 100%;
-		display: flex;
-		gap: 5px;
-		align-items: center;
-		justify-content: flex-end;
-		margin-right: 5px;
-		margin-top: 5px;
-	}
-
-	.comment-tip .btn-comment {
-		border: 1px solid #cccccc;
-		color: #cccccc;
-		border-radius: 10px;
-		padding: 5px 10px;
-	}
-
-	.btn-comment.active {
-		border-color: #5351ff;
-		color: #5351ff;
-	}
-
+	
 	.message {
 		padding: 10px 10px;
 		line-height: 20px;

@@ -18,6 +18,7 @@
 		<view class="uni-images-upload">
 			<view class="image-prev" v-for="(item,index) in images" :key="index">
 				<image :src="item" mode="aspectFill" style="width: 100%;height: 100%;"></image>
+				
 				<uni-icons type="close" size="30" color="#d81e06" class="btn-remove" @click="removeImageFromList(index)"></uni-icons>
 
 			</view>
@@ -140,7 +141,7 @@
 			},
 			onEditorInput(e) {
 				this.message = e.detail.html
-				console.log('编辑器内容发生变化：', e.detail.html);
+				// console.log('编辑器内容发生变化：', e.detail.html);
 			}
 			
 			
@@ -148,72 +149,82 @@
 	}
 </script>
 
-<style>
+<style lang="scss">
+	@import'../../common/common.scss';
 	.btns-box {
 		width: 100%;
 		display: flex;
 		justify-content: space-between;
-		border-bottom: 1px solid #cccccc;
+		border-bottom: 1px solid $btn-border-color;
 		padding: 10px;
+		
+		.btn-cancel {
+			color: $btn-border-color;
+		}
+		
+		.btn-confirm {
+			color: $theme-color;
+		}
+		
 	}
 
-	.btn-cancel {
-		color: #CCCCCC;
-	}
-
-	.btn-confirm {
-		color: #5351FF;
-	}
-
+	
 	.btn-add {
 		width: 60px;
 		height: 60px;
-		background-color: #CCCCCC;
+		background-color:$btn-border-color;
 		display: grid;
 		place-items: center;
 		text-align: center;
 		margin: 10px;
+		
+		.add-icon {
+			width: 100%;
+		
+		}
 	}
 
-	.btn-add .add-icon {
-		width: 100%;
-		/* height: 60%; */
-
-	}
 
 	.uni-images-upload {
 		display: flex;
 		flex-wrap: wrap;
 		gap: 5px;
+		
+		.image-prev {
+			width: 70px;
+			height: 70px;
+			position: relative;
+			
+			.btn-remove {
+				width: 20px;
+				height: 20px;
+				position: absolute;
+				top: 0;
+				right: 0;
+			}
+		}
 	}
 
-	.image-prev {
-		width: 70px;
-		height: 70px;
-		position: relative;
-	}
 
-	.image-prev .btn-remove {
-		width: 20px;
-		height: 20px;
-		position: absolute;
-		top: 0;
-		right: 0;
-	}
 	 /* 编辑器 */
 	.editor-wrapper {
-		height: calc(100vh - var(--window-top) - var(--status-bar-height) - 240px);
-		background: #fff;
+		background: $bg-color-white;
+		
+		.ql-container {
+			padding: 12px 15px;
+			width: 100%;
+			min-height: 30vh;
+			height: 100%;
+			font-size: 16px;
+			line-height: 1.5;
+			
+		}
+		.ql-container  .ql-blank::before {
+			  color: $input-color-placeholder;
+			  font-style: normal;
+		}
+		
 	}
 		
-	.ql-container {
-		box-sizing: border-box;
-		padding: 12px 15px;
-		width: 100%;
-		min-height: 30vh;
-		height: 100%;
-		margin-top: 20px;
-		font-size: 16px;
-		line-height: 1.5;
-	}
+	
 </style>

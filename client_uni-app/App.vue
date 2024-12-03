@@ -43,16 +43,16 @@
 
 
 <style lang="scss">
-	page,
-	view,
-	button,
-	textarea {
+	@use 'common/common' as *;
+	
+	body {
+	  font: 100% $font-stack;
+	}
+	
+	body,button,textarea,view{
 		padding: 0;
 		margin: 0;
 		box-sizing: border-box;
 	}
 
-	view {
-		font-family: STHeiti;
-	}
 </style>

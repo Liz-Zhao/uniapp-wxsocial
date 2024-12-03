@@ -85,11 +85,6 @@
 			onClickItem(e) {
 				if (this.current !== e.currentIndex) {
 					this.current = e.currentIndex
-					// if(this.current === 0){
-					// 	this.getNotificationList()
-					// }else if(this.current === 1){
-					// 	this.getNotificationCommentList()
-					// }
 				}
 			}
 		},
@@ -99,26 +94,30 @@
 	}
 </script>
 
-<style>
+<style lang="scss">
+	@import'../../common/common.scss';
+	page{
+		background-color: $bg-color-grey;
+	}
 	.empty-notifi {
 		text-align: center;
 		width: 100%;
 		margin: 20px auto;
 	}
-
-	.empty-notifi .notifi-image {
+	.notifi-image {
 		margin-bottom: 20px;
 		width: 40%;
 	}
+
 	.message-box{
-		height: 100vh;
-		background-color: #f8f8f8;
+		padding-bottom: 20rpx;
 	}
 	.uni-padding-wrap{
-		background-color: #ffffff;
+		background-color: $bg-color-white;
 	}
 	.content{
 		margin-top: 15px;
 		
 	}
+	
 </style>

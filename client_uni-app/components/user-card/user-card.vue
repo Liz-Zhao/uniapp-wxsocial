@@ -62,51 +62,46 @@
 	}
 </script>
 
-<style>
+<style lang="scss">
+	@import '../../common/common.scss';
+	
 	.user-box {
 		position: relative;
 		margin-bottom: 10px;
-	}
-	.userInfo{
-		display: flex;
-	}
-
-	.avatar {
-		width: 45px;
-		height: 45px;
-		border-radius: 50%;
-	}
-
-	.avatar.S {
-		width: 35px;
-		height: 35px;
-		border-radius: 50%;
-	}
-
-	.user-box .info {
-		margin-left: 20rpx;
-		display: flex;
-		flex-direction: column;
-	}
-
-	.user-box .info .username {
-		color: #000000;
-		font-size: 16px;
-	}
-
-	.user-box .info .postdate {
-		color: #888888;
-		font-size: 13px;
-	}
-
-	.icon {
-		width: 25px;
-		height: 25px;
+		.userInfo{
+			display: flex;
+			.avatar {
+				width: 45px;
+				height: 45px;
+				border-radius: 50%;
+				&.S{
+					width: 35px;
+					height: 35px;
+					border-radius: 50%;
+				}
+			}
+			.info {
+				margin-left: 20rpx;
+				display: flex;
+				flex-direction: column;
+				.username {
+					color: #000000;
+					font-size: 16px;
+				}
+				.postdate {
+					color: #888888;
+					font-size: 13px;
+				}
+			}
+			
+		}
+		
+		.slot-box {
+			position: absolute;
+			right: 0px;
+			top: 2px;
+		}
 	}
 
-	.slot-box {
-		position: absolute;
-		right: 0px;
-		top: 2px;
-	}
+	
 </style>

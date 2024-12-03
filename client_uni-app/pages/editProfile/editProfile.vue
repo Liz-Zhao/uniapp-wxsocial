@@ -120,41 +120,45 @@
 	
 </script>
 
-<style>
+<style lang="scss">
+	@import'../../common/common.scss';
 	.avatar-box{
 		width: 100%;
 		text-align: center;
 		position: relative;
+		
+		.avatar{
+			width: 80px;
+			height: 80px;
+			border-radius: 50%;
+			margin: 10px auto;
+		}
 	}
-	.avatar-box .avatar{
-		width: 80px;
-		height: 80px;
-		border-radius: 50%;
-		margin: 10px auto;
-	}
+
 	.form-item textarea{
 		max-height: 100px;
 	}
 	.btns-box{
 		margin: 10px;
+		.btn-save{
+			margin-bottom: 10px;
+			background-color: $theme-color;
+			color: $bg-color-white;
+		}
 	}
-	.btns-box .btn-save{
-		margin-bottom: 10px;
-		background-color: #5351ff;
-		color: #ffffff;
-	}
+
 	.form-item{
 		display: flex;
 		align-items: flex-start;
 		margin: 15px;
-	}
-	.form-item text{
-		width: 20%;
-	}
-	.form-item input,
-	.form-item textarea{
-		flex: 1;
-		border-bottom: 1px solid #ccc;
+		
+		text{
+			width: 20%;
+		}
+		input, textarea{
+			flex: 1;
+			border-bottom: 1px solid $btn-border-color;
+		}
 	}
 	
 

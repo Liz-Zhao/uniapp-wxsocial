@@ -175,70 +175,76 @@
 	}
 </script>
 
-<style>
+<style lang="scss">
+	@import'../../common/common.scss';
+	
 	.profile-container{
 		width: 100%;
 		margin-top: 20px;
 		position: relative;
 		padding: 0 10px;
-	}
-	.profile-container .profile-header{
-		display: flex;
-		gap: 15px;
-		align-items: center;
-		margin-bottom: 10px;
-	}
-	.profile-container .avatar {
-		width: 60px;
-		height: 60px;
-		border-radius: 50%;
-	}
-	.profile-container .username{
-		font-weight: bold;
-		font-size: 18px;
-		margin: 5px ;
-	}
-	.profile-container .desc{
-		color: #8f8f8f;
+		.profile-header{
+			display: flex;
+			gap: 15px;
+			align-items: center;
+			margin-bottom: 10px;
+		}
+		.avatar {
+			width: 60px;
+			height: 60px;
+			border-radius: 50%;
+		}
+		.username{
+			font-weight: bold;
+			font-size: 18px;
+			margin: 5px ;
+		}
+		.desc{
+			color: #8f8f8f;
+		}
+		.setting-btn{
+			position: absolute;
+			right: 10px;
+			top: 0px;
+		}
 	}
 	
-	.btn-follow{
-		color: #ffffff;
-		background-color: #5351FF;
-		padding: 10px 28px;
-		border-radius: 20px;
-	}
-	.profile-container .setting-btn{
-		position: absolute;
-		right: 10px;
-		top: 0px;
-	}
 	
 	/* my post 缺省模块 */
 	.empty-post-box {
 		width: 100%;
 		text-align: center;
 		margin: 20px auto;
+		
+		.empty-post {
+			width: 40%;
+		}
+		
+		.btn-post {
+			border: 1px solid $btn-border-color;
+			width: 200px;
+			border-radius: 20px;
+			padding: 5px 0;
+			margin: 10px auto;
+		}
 	}
 
-	.empty-post {
-		width: 40%;
-	}
-
-	.empty-post-box .btn-post {
-		border: 1px solid #ccc;
-		width: 200px;
+	.btn-follow{
+		color: #ffffff;
+		background-color: $theme-color;
+		padding: 10px 28px;
 		border-radius: 20px;
-		padding: 5px 0;
-		margin: 10px auto;
 	}
+
 	
 	.follow-box{
 		margin: 10px;
+		.btn-follow{
+			color: #ffffff;
+			background-color: $theme-color;
+			padding: 5px 18px;
+			border-radius: 20px;
+		}
 	}
-	.follow-box .btn-follow{
-		color: #ffffff;
-		background-color: #5351FF;
-		padding: 5px 15px;
-	}
+	
 </style>

@@ -120,41 +120,37 @@
 	}
 </script>
 
-<style>
+<style lang="scss">
 	.post {
 		width: 100%;
 		padding: 16px;
 		border-bottom: 1px solid #cccccc;
+		.post-context {
+			margin-bottom: 10px;
+			
+			.text {
+				width: 100%;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				display: -webkit-box;
+				-webkit-line-clamp: 5;
+				overflow: hidden;
+				/* autoprefixer: ignore next */
+				-webkit-box-orient: vertical;
+			}
+		}
+		
+		.post-bottom {
+			display: flex;
+			gap: 15px;
+			align-items: center;
+			
+			.btn-box {
+				display: flex;
+				align-items: center;
+			}
+		}
 	}
 
-	.icon {
-		width: 25px;
-		height: 25px;
-	}
 	
-	.post-context {
-		margin-bottom: 10px;
-	}
-
-	.post-context .text {
-		width: 100%;
-		overflow: hidden;
-		text-overflow: ellipsis;
-		display: -webkit-box;
-		-webkit-line-clamp: 5;
-		overflow: hidden;
-		/* autoprefixer: ignore next */
-		-webkit-box-orient: vertical;
-	}
-
-	.post-bottom {
-		display: flex;
-		gap: 15px;
-		align-items: center;
-	}
-
-	.btn-box {
-		display: flex;
-		align-items: center;
-	}
 </style>

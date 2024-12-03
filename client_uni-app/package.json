@@ -1,1 +1,6 @@
-{}
+{
+  "dependencies": {
+    "sass": "^1.81.1",
+    "sass-loader": "^16.0.3"
+  }
+}

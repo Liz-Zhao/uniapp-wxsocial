@@ -8,6 +8,8 @@ const config = {
 //   useUnifiedTopology: true
 }
 
-mongoose.connect(DB, config);
+mongoose.connect(DB, config).then(()=>{
+    console.log('db connected!')
+});
 
 module.exports = mongoose;

@@ -104,16 +104,18 @@
 	}
 </script>
 
-<style>
+<style lang="scss">
+	@import'../../common/common.scss';
+	
 	.btn-add {
 		position: fixed;
 		right: 30px;
 		bottom: 30px;
 		width: 30px;
 		height: 30px;
-		border: 1px solid #ccc;
+		border: 1px solid $btn-border-color;
 		border-radius: 50%;
 		padding: 5px;
-		background-color: #fff;
+		background-color: $bg-color-white;
 	}
 </style>

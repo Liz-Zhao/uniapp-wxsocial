@@ -47,35 +47,36 @@
 	}
 </script>
 
-<style>
+<style lang="scss">
+	@import '../../common/common.scss';
+	
 	.user-box {
 		display: flex;
 		gap: 5px;
 		padding: 12px;
-		background-color: #ffffff;
+		background-color: $bg-color-white;
 		margin: 10px;
 		border-radius: 5px;
+		.avatar {
+			width: 43px;
+			height: 43px;
+			border-radius: 50%;
+		}
+		.tag {
+			color: $desc-text-color;
+			margin-left: 5px;
+		}
+		
+		.createAt {
+			color: $desc-text-color;
+			font-size: 14px;
+		}
+		
+		.flex {
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+		}
 	}
 
-	.avatar {
-		width: 43px;
-		height: 43px;
-		border-radius: 50%;
-	}
-
-	.tag {
-		color: #888888;
-		margin-left: 5px;
-	}
-
-	.createAt {
-		color: #888888;
-		font-size: 14px;
-	}
-
-	.flex {
-		display: flex;
-		flex-direction: column;
-		justify-content: space-between;
-	}
 </style>
