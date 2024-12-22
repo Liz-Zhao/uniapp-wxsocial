@@ -28,4 +28,4 @@ dist-ssr
 *.rest
 
 # uniapp
-images
+server/public/images/*
