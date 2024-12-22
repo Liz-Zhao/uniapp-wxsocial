@@ -1,5 +1,5 @@
 <template>
-	<view class="wrapper" v-if="visible">
+	<view class="wrapper" v-show="visible">
 		<view class="container">
 			<!-- 评论 -->
 			<view class="box" v-if="ItemType==='comment'">
@@ -30,6 +30,9 @@
 <script>
 	import {del} from '../../api/request';
 	import store from '../../store';
+	import {mapState,mapMutations,mapGetters } from 'vuex';
+	
+	
 	export default {
 		name: "popup-bottom",
 		props: {
@@ -47,19 +50,27 @@
 
 			};
 		},
-		onLoad() {
-
-
-		},
 		methods: {
+			...mapMutations({
+				deletePost:'post/deletePost',
+				hideSetting:'setting/hideSetting',
+			}),
 			hidePostMenu() {
-				store.commit('setting/hideSetting')
+				this.hideSetting();
 			},
 			deleteAPost() {
-				store.dispatch('post/deletePostAction')
-				store.commit('setting/hideSetting')
-				const deletedPostID = store.getters['post/getPostID']
-				this.$emit('delete', deletedPostID)
+				const deletedPostID = store.getters['post/getSelectedPostID']
+				del({url:'/post/'+deletedPostID}).then(()=>{
+					this.deletePost({id:deletedPostID})
+					this.hideSetting()
+				})		
+			},
+			editAPost(){
+				this.hideSetting()
+				uni.reLaunch({
+					url:'/pages/addPost/addPost?id='+ store.getters['post/getSelectedPostID']
+				})
+				
 			},
 			deleteAComment() {
 				del({
@@ -71,19 +82,12 @@
 					this.$emit('deleteComment', this.commentID)
 				})
 			},
-			editAPost(){
-				store.commit('setting/hideSetting')
-				uni.reLaunch({
-					url:'/pages/addPost/addPost?id='+ store.getters['post/getPostID']
-				})
-				
-			}
 		},
 		computed: {
-			visible() {
-				if (!store.getters['setting/visible']) return null;
-				return store.getters['setting/visible']
-			}
+			...mapState({
+				visible: state=>state.setting.visible
+			})
+			
 		}
 
 	}

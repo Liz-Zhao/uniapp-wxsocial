@@ -23,14 +23,13 @@ const upload = multer({ storage: storage });
 // 上传文件
 const uploadFile = (req, res) => {
   try {
-
+    console.log(req.file, req.files)
     if (!req.file && !req.files) {
       return res.status(400).josn({message:"No file uploaded."});
     }
 
     return res.status(200).json({
       message: "success",
-      // data: "http://127.0.0.1:3000/" + req.file.filename,
     });
   } catch (error) {
     return res

@@ -7,7 +7,7 @@ const defaultOptions = {
 	},
 };
 
-const BASE_URL = 'http://127.0.0.1:8001'
+export const BASE_URL = 'http://127.0.0.1:8001'
 const TOKEN_KEY = 'userAuth';
 const LOADING_DELAY = 10; // 50ms 延迟
 let loadingTimer;

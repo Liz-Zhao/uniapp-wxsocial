@@ -32,7 +32,7 @@
 
 <script>
 	import store from '../../store';
-	import { get, post,put } from '../../api/request';
+	import { BASE_URL, get, post,put } from '../../api/request';
 
 	export default {
 		data() {
@@ -47,7 +47,6 @@
 			}
 		},
 		onLoad:function(option){
-			// console.log(option)
 			if(option.id){
 				this.editPostID = option.id;
 				this.getPost()
@@ -94,14 +93,14 @@
 					sourceType: ['album'], //从相册选择
 					success: (res) => {
 						const addImages = res.tempFilePaths;
-						// console.log(addImages,addImages[0])
+						console.log(addImages,addImages[0])
 						// 传多个文件需要反复调用本API。所以跨端的写法就是循环调用本API。
 						addImages.forEach((item)=>{
 							// 上传文件
 							// console.log(item)
 							// uni.removeInterceptor('request')
 							uni.uploadFile({
-								url: 'http://127.0.0.1:3000/photos/upload', 
+								url: BASE_URL+'/photos/upload', 
 								filePath: item,
 								name: 'file',
 								fileType:"image",
@@ -116,6 +115,9 @@
 									this.images.push(item);
 									  
 								},
+								fail(res) {
+									console.log(res)
+								}
 								
 							});
 							

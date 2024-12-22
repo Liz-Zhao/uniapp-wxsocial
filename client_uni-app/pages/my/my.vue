@@ -23,7 +23,6 @@
                 </view>
 				
 				<view  v-else>
-					<post-list :list="list"></post-list>
 					
 				</view>
 				

@@ -2,6 +2,7 @@
 	<view>
 		<user-card :userInfo="post.author" :updatedDate="post.updatedAt">
 		</user-card>
+		
 		<view v-if="ImageStatus">
 			<view class="uni-margin-wrap">
 				<swiper class="swiper" circular :indicator-dots="indicatorDots" :autoplay="autoplay"
@@ -15,13 +16,13 @@
 				</swiper>
 			</view>
 		</view>
+
 		<!-- 文字区域 -->
 		<view class="message">
 			<rich-text :nodes="post.message" ></rich-text>
 		</view>
 
 		<!-- 评论展示区域 -->
-		
 		<view class="comments-box">
 			<view class="comment-nums">评论 {{post.comments}}</view>
 			<scroll-view scroll-y="true" style="height: 100vh;" @scrolltolower='scrolltolower'>
@@ -88,7 +89,7 @@
 					<uni-icons :type="post.isliked ? 'heart-filled' : 'heart'" size="30" color="#d81e06" @click.stop="handleLikePost"></uni-icons>
 					<text>{{post.likes}}</text>
 				</view>
-				<view><uni-icons type="star" size="30"></uni-icons></view>
+				<!-- <view><uni-icons type="star" size="30"></uni-icons></view> -->
 			</view>
 			
 			<view class="comment-tip" v-if="isTextareaVisible">
@@ -105,10 +106,9 @@
 </template>
 
 <script>
-	import {
-		del,get,post
-	} from '../../api/request';
+	import {del,get,post} from '../../api/request';
 	import store from '../../store';
+	import {mapMutations } from 'vuex';
 
 	export default {
 		data() {
@@ -131,6 +131,7 @@
 				isTextareaVisible: false,
 				maxlength: 200,
 				u_token: uni.getStorageSync('userAuth') || '',
+				userId : store.getters['user/user_id'],
 				userIconSize: 'S',
 				ItemType: 'comment',
 				editCommentID: '',
@@ -140,23 +141,30 @@
 
 			}
 		},
-		onLoad: function(option) { //option为object类型，会序列化上个页面传递的参数
-			store.commit('post/setUserID', store.getters['user/user_id'])
-
+		onLoad: function(option) {
 			this.post_id = option.id
-			store.commit('post/setPostID', option.id)
-
-			store.dispatch('post/getPostAction').then(() => {
-				this.post = store.getters['post/getUpdatedPost']
-
+			store.commit('post/setSelectedPostID', option.id)
+			
+			get({url:'/post/'+option.id}).then(({data})=>{
+				this.post = {
+					...data, 
+					isliked: data.likedBy.includes(this.userId),
+					isOwn:this.userId === data.author._id
+					}
+				this.getCommentList()
+				
 			})
-			// this.getPost()
-			this.getCommentList()
-		},
-		onShow() {
 			
 		},
+		
 		methods: {
+			...mapMutations({
+				updatePostLike:'post/updatePostLike',
+				updatePostDislike:'post/updatePostDislike',
+				hideSetting:'setting/hideSetting',
+				showSetting:'setting/showSetting'
+				
+			}),
 			getCommentList() {
 				get({
 					url: "/comments",
@@ -240,27 +248,33 @@
 			  this.isTextareaVisible = false;
 			  this.inputBottom = 20;
 			},
-			handleLikePost(e) {
+			handleLikePost() {
 				if (this.u_token == '') {
 					return uni.showToast({
 						icon: 'fail',
 						title: '请先登录后再试'
 					})
 				}
-
-				store.commit('post/updatePost', this.post)
-				// 调用 Vuex 的点赞逻辑
-				store.dispatch('post/handleLikePostAction').then(() => {
-					// 同步 Vuex 的数据到本地数据
-					Object.assign(this.post, store.getters['post/getUpdatedPost']);
-				});
+				if(this.post.isliked){
+					// 已经点赞，则取消点赞
+					post({url:'/post/'+ this.post_id+'/unlike'}).then(()=>{
+						this.post = {...this.post, isliked: false, likes: this.post.likes -1}
+						this.updatePostDislike({id:this.post_id})
+					})
+				}else{
+					// 进行点赞
+					post({url:'/post/'+ this.post_id+'/like'}).then(()=>{
+						this.post = {...this.post, isliked: true, likes: this.post.likes +1}
+						this.updatePostLike({id:this.post_id})
+					})
+				}
 			},
 			showMore(commentID) {
-				store.commit('setting/showSetting')
+				this.showSetting()
 				this.editCommentID = commentID;
 			},
 			removeComment(id) {
-				store.commit('setting/hideSetting')
+				this.hideSetting()
 				del({
 					url: '/comment/' + this.editCommentID
 				}).then(res => {

@@ -23,22 +23,6 @@ const isAuth = (req, res, next) => {
 
 
 };
-/**
- * {
-  "decoded": {
-    "data": {
-      "_id": "6733193ca962081f22f3a77a",
-      "username": "user_sglo-io5jSPRYBgnIJ5bQ",
-      "openid": "",
-      "description": "",
-      "profilePic": "/assets/images/avatar.png",
-      "createdAt": "2024-11-12T09:00:44.525Z",
-      "updatedAt": "2024-11-12T09:00:44.525Z",
-      "__v": 0
-    },
-    "iat": 1731464702
-  }
-}
- */
+
 
 module.exports = { isAuth };

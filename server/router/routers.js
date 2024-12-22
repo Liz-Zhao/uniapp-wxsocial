@@ -26,19 +26,10 @@ router.delete("/post/:id", isAuth, Post.deletePost);
 router.put("/post/:id", isAuth, Post.editPost);
 
 // 文件上传
-router.post(
-  "/upload/file",
-  isAuth,
-  upload.single("file"),
-  uploadFile
-);
+router.post("/upload/file",isAuth,upload.single("file"),uploadFile);
 
 // 多传，最多9张
-router.post("/photos/upload", 
-  isAuth,
-  upload.array("file", 9),
-  uploadFile,
-);
+router.post("/photos/upload", isAuth,upload.array("file", 9),uploadFile);
 
 // 通知
 router.get("/notifications", isAuth, Notification.getNotifications);

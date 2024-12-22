@@ -115,6 +115,7 @@ const getPosts = async (req, res) => {
       .populate({
         path: "author",
       })
+      .sort({'updatedAt':-1})
       .limit(pageSize)
       .skip((pageIndex - 1) * pageSize);
 
